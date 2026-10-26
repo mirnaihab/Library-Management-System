@@ -45,7 +45,7 @@
 
 ## 7. App shell (UI)
 
-- [ ] 7.1 Write the `main()` wiring: `SystemClock` set to the device date, the in-memory repositories, `Library`, the seed and `Session`, passed into `AppShell`. Verify that `flutter run` (or `flutter build macos --debug`) starts without errors.
+- [x] 7.1 Write the `main()` wiring: `SystemClock` set to the device date, the in-memory repositories, `Library`, the seed and `Session`, passed into `AppShell`. Verify that `flutter run` (or `flutter build macos --debug`) starts without errors.
 - [x] 7.2 Build the role switch (`lib/ui/role_switch.dart`) in the app bar, listing "Librarian (<name>)" and then "M-0001 <name>"… Add widget tests for:
   - the starting value is Librarian
   - every member is listed
@@ -62,7 +62,7 @@
 
 ## 8. Integration check
 
-- [ ] 8.1 Run `flutter analyze` and `flutter test`, and check that both are clean. Then launch the app and manually check every scenario in `specs/app-shell/spec.md`: the role switch, the navigation for each role, the clock control and the sample data counts.
+- [x] 8.1 Run `flutter analyze` and `flutter test`, and check that both are clean. Then launch the app and manually check every scenario in `specs/app-shell/spec.md`: the role switch, the navigation for each role, the clock control and the sample data counts.
 
 ## Workflow follow-up
 
