@@ -86,6 +86,15 @@ void main() {
     expect(notifications, 1);
   });
 
+  test('listeners see the new day when advanceClock notifies', () {
+    final seen = <Day>[];
+    library.addListener(() => seen.add(library.today));
+
+    library.advanceClock();
+
+    expect(seen, [Day(2026, 1, 11)]);
+  });
+
   test('books and members read through the repositories', () {
     books.add(
         title: 'Dune', author: 'Frank Herbert', category: Category.fiction, copies: 2);

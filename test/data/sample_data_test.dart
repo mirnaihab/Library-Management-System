@@ -49,6 +49,8 @@ void main() {
     expect(members.map((m) => m.email.toLowerCase()).toSet(), hasLength(3));
   });
 
+  // TODO(Story 2.1): this only checks the librarian has a name; it can't catch
+  // a second librarian while Library stores a single one.
   test('there is exactly one librarian', () {
     expect(library.librarian?.name, isNotEmpty);
   });
