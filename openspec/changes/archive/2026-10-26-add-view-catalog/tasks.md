@@ -42,7 +42,7 @@
 
 ## 4. Integration check
 
-- [ ] 4.1 Run `flutter analyze` and `flutter test`, and check that both are clean. Then launch the app and check every scenario in `specs/catalog/spec.md` by hand, except "No books", which only the widget test can reach before Story 1.4. Check the catalog as both Librarian and M-0001.
+- [x] 4.1 Run `flutter analyze` and `flutter test`, and check that both are clean. Then launch the app and check every scenario in `specs/catalog/spec.md` by hand, except "No books", which only the widget test can reach before Story 1.4. Check the catalog as both Librarian and M-0001.
 
 ## Workflow follow-up
 
