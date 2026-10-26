@@ -54,4 +54,37 @@ void main() {
         ['Catalog', 'My loans', 'My reservations', 'My fees']);
     expect(selectedIndex(tester), 0);
   });
+
+  /// The book titles the Catalog shows, top to bottom.
+  List<String?> catalogTitles(WidgetTester tester) => [
+        for (final tile in tester.widgetList<ListTile>(find.byType(ListTile)))
+          (tile.title! as Text).data,
+      ];
+
+  void useTallView(WidgetTester tester) {
+    tester.view.physicalSize = const Size(800, 2000);
+    tester.view.devicePixelRatio = 1;
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.view.resetDevicePixelRatio);
+  }
+
+  testWidgets("the librarian's Catalog shows the book list", (tester) async {
+    useTallView(tester);
+    await pumpShell(tester);
+    expect(catalogTitles(tester), hasLength(8));
+    expect(find.text('The Pragmatic Programmer'), findsOneWidget);
+  });
+
+  testWidgets('a member sees the same catalog as the librarian',
+      (tester) async {
+    useTallView(tester);
+    await pumpShell(tester);
+    final librarianTitles = catalogTitles(tester);
+
+    session.selectMember('M-0001');
+    await tester.pumpAndSettle();
+
+    expect(destinations(tester).first, 'Catalog');
+    expect(catalogTitles(tester), librarianTitles);
+  });
 }
