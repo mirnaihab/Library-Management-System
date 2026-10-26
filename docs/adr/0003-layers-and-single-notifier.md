@@ -5,4 +5,4 @@ The code is split into `lib/domain/` (plain Dart entities, rules, `Clock` and re
 ## Consequences
 
 - Every public method of the library service first runs the hold-expiry sweep (Story 6.3.4) as of the clock's today, then does its work. No screen checks expiry on its own.
-- Domain tests import nothing from Flutter.
+- Domain code imports nothing from Flutter. Tests, including domain tests, may use `flutter_test`, so `pubspec.yaml` needs no separate `test` package.
