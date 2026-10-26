@@ -1,32 +1,50 @@
 schema: spec-driven
 
-# Project context (optional)
-# Add only constraints that should guide OpenSpec artifacts and workflows.
-# Include constraints an agent cannot infer by reading the code.
-# Keep general project documentation and discoverable codebase facts out.
-# Example:
-#   context: |
-#     Designs and tasks must cover Windows, macOS, and Linux
-#     Write all artifacts in Spanish
+# Project context: constraints every OpenSpec artifact and workflow must follow.
+# The full user stories and acceptance criteria are the input, in docs/stories.md.
+context: |
+  Flutter app (Dart). The user stories and acceptance criteria are in docs/stories.md;
+  each change implements one story (or the shared foundation) from that file.
+  Domain terms are defined in GLOSSARY.md and decisions in docs/adr/; follow them.
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always state what is out of scope
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+  Global rules (apply to every story):
+  - One app with two roles, Librarian and Member, chosen by a role switch at the top
+    of the screen. There is no real login.
+  - All data is stored in memory and lost on restart. The app starts with sample data:
+    at least 8 books, 3 members and 1 librarian.
+  - "Today" comes from an injectable clock. Domain code never calls DateTime.now()
+    directly, so tests can control time. All date rules count calendar days.
+  - Money is whole EGP amounts only (integers).
+  - Every rule violation shows a clear message to the user, using the exact text
+    given in the acceptance criteria in docs/stories.md.
+  - Out of scope: real login and passwords, a database, payments, notifications,
+    multiple library branches.
 
-# Per-operation guidance (optional)
-# Add advisory guidance for how apply and archive work should be conducted.
-# This is separate from artifact rules above.
-# Example:
-#   operations:
-#     apply:
-#       guidance:
-#         - Keep test summaries concise
-#     archive:
-#       guidance:
-#         - Summarize the archive outcome before finishing
+# Per-artifact rules
+rules:
+  proposal:
+    - Name the story number(s) from docs/stories.md that the change implements
+    - State what is out of scope, especially behaviour that belongs to later stories
+  specs:
+    - Use only these capabilities, so each area has one spec - catalog, members, loans, fees, reservations, dashboard (plus app-shell for the role switch, clock and sample data)
+    - Turn every acceptance criterion into at least one scenario
+    - Quote error messages exactly as written in docs/stories.md
+    - Give concrete dates and amounts in date and fee scenarios (e.g. due 2026-01-10, returned 2026-01-13, fee 15 EGP)
+  design:
+    - Keep business rules in plain Dart domain code, separate from Flutter widgets, so they can be unit tested
+    - Read data through repository interfaces backed by in-memory implementations
+  tasks:
+    - Put domain logic tasks before UI tasks
+    - Every domain rule gets a failing-test task before its implementation task
+    - Keep each task small enough to finish and verify in one sitting
+
+# Per-operation guidance
+operations:
+  apply:
+    guidance:
+      - Use test-driven development (red, green, refactor) for domain rules
+      - Run flutter analyze and flutter test before marking a task done
+      - Do not commit; the developer reviews and commits
+  archive:
+    guidance:
+      - Confirm all tasks are checked and flutter test passes before archiving
