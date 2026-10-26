@@ -1,0 +1,3 @@
+# A passed-on hold starts the day after the previous pickup deadline
+
+When a hold expires and the copy passes to the next waiting member, the new hold starts the day after the previous pickup deadline, not on the day the app happens to notice. Expiry is checked lazily (Story 6.3.4), so "today" would make holds depend on when someone opened the app. With this rule, the same dates always give the same holds, and tests can use exact dates. For example: returned Jan 10, so Ana's deadline is Jan 13. Ben's hold then runs Jan 14–17 and Cleo's Jan 18–21. If the app is next opened on Jan 20, Ana's and Ben's holds have both expired, and Cleo has a hold until Jan 21. Holds created by a return (Story 6.2) or by adding copies (editing a book) start on that day.

@@ -1,0 +1,3 @@
+# Fees are created only on return
+
+A fee is created only when a loan is returned late (Story 5.1). An overdue loan that hasn't been returned adds nothing to the member's outstanding fees, so it never triggers the "more than 20 EGP" borrowing block in Story 5.2. We follow the acceptance criteria as written, even though this is a known gap: a member can keep an overdue book without being blocked, apart from the borrowing limit. Overdue open loans still appear on the dashboard (Story 7.1). If the library later wants overdue books to block borrowing, add a separate "has overdue loans" rule. Don't accrue fees before return, because that would change how fees are calculated and paid.
