@@ -36,6 +36,10 @@ How many interchangeable physical copies of a book the library owns. Individual 
 Copies minus open loans minus holds for that book.
 _Avoid_: In stock, free copies
 
+**Availability**:
+A book's available copies out of its copies, written as "2 of 3 available".
+_Avoid_: Stock
+
 **Category**:
 One of a fixed set of subjects a book belongs to: Fiction, Science, History, Technology, Children.
 
