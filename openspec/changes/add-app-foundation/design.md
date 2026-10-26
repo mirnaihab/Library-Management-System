@@ -8,7 +8,7 @@
 
 **Goals:**
 - Each later story adds only its own entities, rules, repository methods and screens. It doesn't change the shell, the clock or how errors are shown.
-- Domain and application code can be tested with `flutter test` without building any widgets, and the domain tests import nothing from Flutter.
+- Domain and application code can be tested with `flutter test` without building any widgets, and domain code imports nothing from Flutter (tests may use `flutter_test`).
 
 **Non-Goals:**
 - No entities beyond Book, Member and Librarian. In particular, there are no Loan, Fee or Reservation types yet.
