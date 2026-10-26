@@ -5,4 +5,5 @@ The code is split into `lib/domain/` (plain Dart entities, rules, `Clock` and re
 ## Consequences
 
 - Every public method of the library service first runs the hold-expiry sweep (Story 6.3.4) as of the clock's today, then does its work. No screen checks expiry on its own.
+- Queries never notify; only commands and the clock notify. A sweep run by a query must not call `notifyListeners()`, because queries run inside widget builds. This is safe because today changes only through the clock (the device date is read once at launch, then only the dev control moves it), so every hold that can expire becomes due when `advanceClock()` runs. `advanceClock()` therefore sweeps after it moves the day and then notifies, which refreshes every screen. A query's sweep is a safety net that should find nothing new.
 - Domain code imports nothing from Flutter. Tests, including domain tests, may use `flutter_test`, so `pubspec.yaml` needs no separate `test` package.

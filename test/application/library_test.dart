@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:library_management_system/application/library.dart';
 import 'package:library_management_system/data/in_memory_book_repository.dart';
 import 'package:library_management_system/data/in_memory_member_repository.dart';
+import 'package:library_management_system/data/sample_data.dart';
 import 'package:library_management_system/domain/book.dart';
 import 'package:library_management_system/domain/category.dart';
 import 'package:library_management_system/domain/clock.dart';
@@ -38,6 +39,21 @@ class SweepCountingLibrary extends Library {
   void sweep() => log.add('sweep');
 }
 
+/// Records the clock's today each time it sweeps.
+class DayRecordingLibrary extends Library {
+  DayRecordingLibrary(
+    this.recordedClock, {
+    required super.bookRepository,
+    required super.memberRepository,
+  }) : super(clock: recordedClock);
+
+  final SystemClock recordedClock;
+  final sweptOn = <Day>[];
+
+  @override
+  void sweep() => sweptOn.add(recordedClock.today);
+}
+
 void main() {
   late SystemClock clock;
   late LoggingBookRepository books;
@@ -70,6 +86,15 @@ void main() {
     expect(notifications, 1);
   });
 
+  test('listeners see the new day when advanceClock notifies', () {
+    final seen = <Day>[];
+    library.addListener(() => seen.add(library.today));
+
+    library.advanceClock();
+
+    expect(seen, [Day(2026, 1, 11)]);
+  });
+
   test('books and members read through the repositories', () {
     books.add(
         title: 'Dune', author: 'Frank Herbert', category: Category.fiction, copies: 2);
@@ -90,5 +115,43 @@ void main() {
     library.librarian;
     library.advanceClock();
     expect(log, ['sweep', 'sweep', 'sweep']);
+  });
+
+  test('catalog sweeps before reading the books', () {
+    library.catalog;
+    expect(log, ['sweep', 'books read']);
+  });
+
+  test('catalog lists the sample books by title A-Z', () {
+    seedSampleData(library, FixedClock(Day(2026, 1, 10)));
+    expect([for (final entry in library.catalog) entry.book.title], [
+      'A Brief History of Time',
+      'Clean Code',
+      'Cosmos',
+      'Dune',
+      'The Guns of August',
+      'The Pragmatic Programmer',
+      'The Very Hungry Caterpillar',
+      'To Kill a Mockingbird',
+    ]);
+  });
+
+  test('catalog does not notify listeners', () {
+    var notifications = 0;
+    library.addListener(() => notifications++);
+    library.catalog;
+    expect(notifications, 0);
+  });
+
+  test('advanceClock sweeps as of the new day', () {
+    final recording = DayRecordingLibrary(
+      SystemClock(start: Day(2026, 1, 10)),
+      bookRepository: InMemoryBookRepository(),
+      memberRepository: InMemoryMemberRepository(),
+    );
+
+    recording.advanceClock();
+
+    expect(recording.sweptOn, [Day(2026, 1, 11)]);
   });
 }
