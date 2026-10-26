@@ -18,6 +18,8 @@ class RoleSwitch extends StatelessWidget {
     return ListenableBuilder(
       listenable: Listenable.merge([library, session]),
       builder: (context, _) => DropdownButton<String>(
+        // TODO(Story 2.1): if the selected member is no longer in
+        // library.members, DropdownButton asserts; fall back to the librarian.
         value: switch (session.role) {
           LibrarianRole() => _librarian,
           MemberRole(:final memberNumber) => memberNumber,

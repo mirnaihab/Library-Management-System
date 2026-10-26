@@ -18,6 +18,9 @@ class Library extends ChangeNotifier {
   });
 
   /// Exposed for seeding sample data; screens use the queries below.
+  // TODO(Stories 1.2, 2.1): once seeding goes through the add-book and
+  // register-member commands, make the repositories and the librarian setter
+  // private so nothing can skip the sweep or the notification.
   final BookRepository bookRepository;
   final MemberRepository memberRepository;
   final SystemClock _clock;

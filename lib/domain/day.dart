@@ -2,10 +2,19 @@
 ///
 /// Backed by a UTC midnight so daylight-saving changes can't shift a day.
 class Day implements Comparable<Day> {
-  Day(int year, int month, int day) : _utc = DateTime.utc(year, month, day);
+  /// Throws [ArgumentError] for a date that doesn't exist, such as 2026-02-30.
+  factory Day(int year, int month, int day) {
+    final result = Day._(DateTime.utc(year, month, day));
+    if (result.year != year || result.month != month || result.day != day) {
+      throw ArgumentError('Not a calendar day: $year-$month-$day');
+    }
+    return result;
+  }
 
   Day.fromDateTime(DateTime dateTime)
-      : this(dateTime.year, dateTime.month, dateTime.day);
+      : this._(DateTime.utc(dateTime.year, dateTime.month, dateTime.day));
+
+  Day._(this._utc);
 
   final DateTime _utc;
 
@@ -13,7 +22,7 @@ class Day implements Comparable<Day> {
   int get month => _utc.month;
   int get day => _utc.day;
 
-  Day addDays(int days) => Day(year, month, day + days);
+  Day addDays(int days) => Day._(DateTime.utc(year, month, day + days));
 
   int daysUntil(Day other) => other._utc.difference(_utc).inDays;
 

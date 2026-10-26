@@ -9,6 +9,7 @@ import '../domain/member.dart';
 /// Inserts straight into the repositories until the add-book (1.2) and
 /// register-member (2.1) commands exist. [clock] lets later stories seed past
 /// events by moving it backwards.
+// TODO(Story 3.1): [clock] is unused until sample loans are seeded in the past.
 void seedSampleData(Library library, FixedClock clock) {
   const books = [
     ('The Pragmatic Programmer', 'Andrew Hunt', Category.technology, 3),
